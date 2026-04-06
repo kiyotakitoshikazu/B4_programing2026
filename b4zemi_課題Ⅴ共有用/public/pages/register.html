@@ -19,5 +19,21 @@
 </body>
 <script>
 // 【課題】#register-formがsubmitされたら、supabaseにinsertする処理を実装してください。
+document.getElementById('register-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value;
+    const age = parseInt(document.getElementById('age').value, 10);
 
+    const { data, error } = await window.mySupabase
+        .from('users')
+        .insert([{ name, age }]);
+
+    if (error) {
+        console.error('Error inserting data:', error);
+        alert('登録に失敗しました: ' + error.message);
+    } else {
+        alert('登録しました');
+        document.getElementById('register-form').reset();
+    }
+});
 </script>
