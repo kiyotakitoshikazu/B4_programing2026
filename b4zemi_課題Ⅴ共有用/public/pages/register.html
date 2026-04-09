@@ -32,8 +32,7 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
         console.error('Error inserting data:', error);
         alert('登録に失敗しました: ' + error.message);
     } else {
-        alert('登録しました');
-        document.getElementById('register-form').reset();
+        window.location.href = 'success.html';
     }
 });
 </script>
