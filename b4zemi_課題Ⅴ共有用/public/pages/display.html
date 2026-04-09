@@ -22,4 +22,23 @@
 <script>
 // 【課題】supabaseからデータをselectして、#displayに表形式で出力する処理を実装してください。
 
+async function loadUsers() {
+    const { data, error } = await mySupabase
+        .from('users')
+        .select('name, age');
+    if (error) {
+        console.error('Error loading users:', error);
+        return;
+    }
+    const tbody = document.querySelector('#user-table tbody');
+    tbody.innerHTML = '';
+    data.forEach(user => {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${user.name}</td><td>${user.age}</td>`;
+        tbody.appendChild(row);
+    });
+}
+loadUsers();
+
+
 </script>
