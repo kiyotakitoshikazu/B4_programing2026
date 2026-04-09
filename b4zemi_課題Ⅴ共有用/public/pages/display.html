@@ -9,9 +9,17 @@
 <body>
     <h1>表示</h1>
     <div id="display">
-        <table id="user-table">
+        <table id="user-table" border="1">
             <thead>
-            <tr><th>名前</th><th>年齢</th></tr>
+            <tr>
+                <th>大学名</th>
+                <th>学部名</th>
+                <th>学科名</th>
+                <th>学年</th>
+                <th>名前</th>
+                <th>年齢</th>
+                <th>空いている曜日</th>
+            </tr>
             </thead>
             <tbody></tbody>
         </table>
@@ -25,7 +33,7 @@
 async function loadUsers() {
     const { data, error } = await mySupabase
         .from('users')
-        .select('name, age');
+        .select('*');
     if (error) {
         console.error('Error loading users:', error);
         return;
@@ -34,7 +42,17 @@ async function loadUsers() {
     tbody.innerHTML = '';
     data.forEach(user => {
         const row = document.createElement('tr');
-        row.innerHTML = `<td>${user.name}</td><td>${user.age}</td>`;
+        // 配列（曜日）をカンマ区切り文字列に変換
+        const days = user.available_days ? user.available_days.join(', ') : '';
+        row.innerHTML = `
+            <td>${user.uni_name || ''}</td>
+            <td>${user.faculty_name || ''}</td>
+            <td>${user.department_name || ''}</td>
+            <td>${user.grade || ''}</td>
+            <td>${user.name || ''}</td>
+            <td>${user.age || ''}</td>
+            <td>${days}</td>
+        `;
         tbody.appendChild(row);
     });
 }
