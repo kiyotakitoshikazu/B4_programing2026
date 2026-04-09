@@ -9,10 +9,41 @@
 <body>
     <h1>登録</h1>
     <form id="register-form" method="post">
+        <label for="uni_name">大学名:</label>
+        <input type="text" id="uni_name" name="uni_name" required><br><br>
+
+        <label for="faculty_name">学部名:</label>
+        <input type="text" id="faculty_name" name="faculty_name" required><br><br>
+
+        <label for="department_name">学科名:</label>
+        <input type="text" id="department_name" name="department_name" required><br><br>
+
+        <label for="grade">学年:</label>
+        <select id="grade" name="grade" required>
+            <option value="">選択してください</option>
+            <option value="学部1年">学部1年</option>
+            <option value="学部2年">学部2年</option>
+            <option value="学部3年">学部3年</option>
+            <option value="学部4年">学部4年</option>
+            <option value="修士1年">修士1年</option>
+            <option value="修士2年">修士2年</option>
+        </select><br><br>
+
         <label for="name">名前:</label>
         <input type="text" id="name" name="name" required><br><br>
+
         <label for="age">年齢:</label>
         <input type="number" id="age" name="age" required><br><br>
+
+        <label>空いている曜日:</label><br>
+        <label><input type="checkbox" name="available_days" value="月">月</label>
+        <label><input type="checkbox" name="available_days" value="火">火</label>
+        <label><input type="checkbox" name="available_days" value="水">水</label>
+        <label><input type="checkbox" name="available_days" value="木">木</label>
+        <label><input type="checkbox" name="available_days" value="金">金</label>
+        <label><input type="checkbox" name="available_days" value="土">土</label>
+        <label><input type="checkbox" name="available_days" value="日">日</label><br><br>
+
         <input type="submit" value="登録">
     </form>
     <a href="../index.html">ホーム</a>
@@ -21,12 +52,25 @@
 // 【課題】#register-formがsubmitされたら、supabaseにinsertする処理を実装してください。
 document.getElementById('register-form').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const uni_name = document.getElementById('uni_name').value;
+    const faculty_name = document.getElementById('faculty_name').value;
+    const department_name = document.getElementById('department_name').value;
+    const grade = document.getElementById('grade').value;
     const name = document.getElementById('name').value;
     const age = parseInt(document.getElementById('age').value, 10);
+    const available_days = Array.from(document.querySelectorAll('input[name="available_days"]:checked')).map(cb => cb.value);
 
     const { data, error } = await window.mySupabase
         .from('users')
-        .insert([{ name, age }]);
+        .insert([{ 
+            uni_name, 
+            faculty_name, 
+            department_name, 
+            grade, 
+            name, 
+            age, 
+            available_days 
+        }]);
 
     if (error) {
         console.error('Error inserting data:', error);
